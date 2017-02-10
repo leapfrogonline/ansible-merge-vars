@@ -1,0 +1,6 @@
+ansible>=2
+hypothesis>=3.6,<3.7
+mock>=2,<3
+
+# lint
+pylint==1.6.5

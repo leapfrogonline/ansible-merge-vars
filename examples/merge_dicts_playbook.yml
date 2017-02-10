@@ -1,0 +1,24 @@
+- name: Example of merging dicts
+  hosts: localhost
+  gather_facts: false  # Speed up the example
+  vars: # Note that these could be definied anywhere in inventory
+    group1_settings__to_merge:
+      some_setting: "foo"
+      another_setting: "bar"
+    group2_settings__to_merge:
+      some_setting: "foo"
+      yet_another_setting: "baz"
+    group3_settings__to_merge:
+      some_setting: "foo"
+      a_totally_different_setting: "qux"
+    group4_some_other_var:  # This won't get merged
+      what: ever
+  tasks:
+    - name: Merge settings vars
+      merge_vars:
+        suffix_to_merge: settings__to_merge
+        merged_var_name: merged_settings
+        expected_type: dict
+
+    - debug:
+        var: merged_settings

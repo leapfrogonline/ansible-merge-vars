@@ -1,0 +1,26 @@
+- name: Example of merging lists with deduplication
+  hosts: localhost
+  gather_facts: false  # Speed up the example
+  vars: # Note that these could be definied anywhere in inventory
+    group1_ports__to_merge:
+      - 22
+      - 80
+      - 443
+    group2_ports__to_merge:
+      - 22
+      - 1111
+    group3_ports__to_merge:
+      - 443
+      - 2222
+    group4_some_other_var:  # This won't get merged
+      - 3333
+      - 4444
+  tasks:
+    - name: Merge port vars and dedup
+      merge_vars:
+        suffix_to_merge: ports__to_merge
+        merged_var_name: merged_ports_deduped
+        expected_type: list
+
+    - debug:
+        var: merged_ports_deduped

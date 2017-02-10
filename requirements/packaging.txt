@@ -1,0 +1,2 @@
+pip>=9,<10
+setuptools>=34,<35
