@@ -108,7 +108,8 @@ def flatten(list_of_lists):
     Flattens a list of lists:
         >>> flatten([[1, 2] [3, 4]])
         [1, 2, 3, 4]
-    F U python for not having this in the standard lib
+
+    I wish Python had this in the standard lib :()
     """
     return list((x for y in list_of_lists for x in y))
 
