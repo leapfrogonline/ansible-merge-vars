@@ -12,6 +12,7 @@ provisioning.
 - [Usage](#usage)
   - [Merging dicts](#merging-dicts)
   - [Merging lists](#merging-lists)
+- [Verbosity](#verbosity)
 - [Example Playbooks](#example-playbooks)
 - [Contributing](#contributing)
 
@@ -212,6 +213,7 @@ A note about `dedup`:
   * It has no effect when the merged vars are dictionaries.
 
 ## Verbosity
+
 Running ansible-playbook with `-v` will cause this plugin to output the order in
 which the keys are being merged:
 
