@@ -1,4 +1,4 @@
-- name: Example of merging lists
+- name: Example of merging lists without deduplication
   hosts: localhost
   gather_facts: false  # Speed up the example
   vars: # Note that these could be definied anywhere in inventory
