@@ -30,7 +30,7 @@ class ActionModule(ActionBase):
     def run(self, tmp=None, task_vars=None):
         suffix_to_merge = self._task.args.get('suffix_to_merge', '')
         merged_var_name = self._task.args.get('merged_var_name', '')
-        dedup = self._task.args.get('dedup')
+        dedup = self._task.args.get('dedup', True)
         expected_type = self._task.args.get('expected_type')
         all_keys = task_vars.keys()
 
@@ -88,7 +88,7 @@ def merge_dict(merge_vals):
     return merged
 
 
-def merge_list(merge_vals, dedup=False):
+def merge_list(merge_vals, dedup):
     """ To merge lists, just concat them. Dedup if wanted. """
     check_type(merge_vals, list)
     merged = flatten(merge_vals)
@@ -109,7 +109,7 @@ def flatten(list_of_lists):
         >>> flatten([[1, 2] [3, 4]])
         [1, 2, 3, 4]
 
-    I wish Python had this in the standard lib :()
+    I wish Python had this in the standard lib :(
     """
     return list((x for y in list_of_lists for x in y))
 

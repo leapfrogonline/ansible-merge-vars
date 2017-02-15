@@ -28,7 +28,7 @@ test: .build-timestamps/dev-deps
 	$(PYTHON) -m unittest discover -s tests
 
 examples: .build-timestamps/dev-deps
-	env/bin/ansible-playbook examples/*_playbook.yml
+	env/bin/ansible-playbook -v examples/*_playbook.yml
 
 test-all: lint test examples
 

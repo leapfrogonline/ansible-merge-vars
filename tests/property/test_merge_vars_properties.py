@@ -66,10 +66,11 @@ def merge_dicts(dicts):
 class TestMergeVarsProperties(unittest.TestCase):
 
     @given(*gen_int_lists(3))
-    def test_merge_lists(self, list1, list2, list3):
+    def test_merge_lists_no_dedup(self, list1, list2, list3):
         task_args = {
             'suffix_to_merge': 'whatever__to_merge',
             'merged_var_name': 'merged_var',
+            'dedup': False,
             'expected_type': 'list',
         }
         task_vars = {
@@ -96,7 +97,6 @@ class TestMergeVarsProperties(unittest.TestCase):
         task_args = {
             'suffix_to_merge': 'whatever__to_merge',
             'merged_var_name': 'merged_var',
-            'dedup': True,
             'expected_type': 'list',
         }
         task_vars = {
@@ -115,7 +115,6 @@ class TestMergeVarsProperties(unittest.TestCase):
         task_args = {
             'suffix_to_merge': 'whatever__to_merge',
             'merged_var_name': 'merged_var',
-            'dedup': True,
             'expected_type': 'list',
         }
         task_vars = {

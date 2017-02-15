@@ -20,7 +20,6 @@
       merge_vars:
         suffix_to_merge: ports__to_merge
         merged_var_name: merged_ports_deduped
-        dedup: true
         expected_type: list
 
     - debug:

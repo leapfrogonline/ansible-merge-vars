@@ -169,7 +169,6 @@ merged_ports:
   - 1
   - 2
   - 3
-  - 3
   - 4
   - 5
 ```
@@ -183,27 +182,27 @@ merged_ports:
   - 5
   - 1
   - 2
-  - 3
 ```
 
-Notice that double `3` in there. By default, this `merge_vars` plugin will
-not try to do any de-duping. If you want de-duping, you have to declare the
-`dedup` argument:
+Notice that `3` only appears once in the merged result. By default, this
+`merge_vars` plugin will de-dupe the resulting merged value. If you don't want
+to de-dupe the merged value, you have to declare the `dedup` argument:
 
 ```yaml
 name: Merge open ports
 merge_vars:
   suffix_to_merge: open_ports__to_merge
   merged_var_name: merged_ports
-  dedup: true
+  dedup: false
   expected_type: 'list'
 ```
-which will set this fact:
+which will set this fact (or some permutation thereof):
 
 ```yaml
 merged_ports:
   - 1
   - 2
+  - 3
   - 3
   - 4
   - 5
@@ -211,8 +210,32 @@ merged_ports:
 
 A note about `dedup`:
   * It has no effect when the merged vars are dictionaries.
-Finally, running ansible-playbook with `-v` will cause this plugin to
-output the order in which the keys are being merged.
+
+## Verbosity
+Running ansible-playbook with `-v` will cause this plugin to output the order in
+which the keys are being merged:
+
+```
+PLAY [Example of merging lists] ************************************************
+
+TASK [Merge port vars] *********************************************************
+Merging vars in this order: [u'group2_ports__to_merge', u'group3_ports__to_merge', u'group1_ports__to_merge']
+ok: [localhost] => {"ansible_facts": {"merged_ports": [22, 1111, 443, 2222, 80]}, "changed": false}
+
+TASK [debug] *******************************************************************
+ok: [localhost] => {
+    "merged_ports": [
+        22,
+        1111,
+        443,
+        2222,
+        80
+    ]
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=6    changed=0    unreachable=0    failed=0
+```
 
 ## Example Playbooks
 
