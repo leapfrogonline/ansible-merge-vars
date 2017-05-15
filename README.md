@@ -16,6 +16,10 @@ provisioning.
 - [Example Playbooks](#example-playbooks)
 - [Contributing](#contributing)
 
+## Requirements
+
+This plugin requires Ansible version >= 2.1.0.0
+
 ## Installation
 
 By default, Ansible will look for action plugins in an `action_plugins` folder
