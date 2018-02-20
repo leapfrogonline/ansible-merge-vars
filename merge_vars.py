@@ -39,6 +39,8 @@ class ActionModule(ActionBase):
         # Validate args
         if expected_type not in ['dict', 'list']:
             raise AnsibleError("expected_type must be set ('dict' or 'list').")
+        if not merged_var_name:
+            raise AnsibleError("merged_var_name must be set")
         if not suffix_to_merge.endswith('__to_merge'):
             raise AnsibleError("Merge suffix must end with '__to_merge', sorry!")
         if merged_var_name in all_keys:
