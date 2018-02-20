@@ -32,6 +32,7 @@ class ActionModule(ActionBase):
         merged_var_name = self._task.args.get('merged_var_name', '')
         dedup = self._task.args.get('dedup', True)
         expected_type = self._task.args.get('expected_type')
+        cacheable = bool(self._task.args.get('cacheable', False))
         all_keys = task_vars.keys()
 
         # Validate args
@@ -73,6 +74,7 @@ class ActionModule(ActionBase):
         merged = self._templar.template(merged)
         return {
             'ansible_facts': {merged_var_name: merged},
+            'ansible_facts_cacheable': cacheable,
             'changed': False,
         }
 
