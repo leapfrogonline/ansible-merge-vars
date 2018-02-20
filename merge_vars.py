@@ -7,6 +7,7 @@ An Ansible action plugin to allow explicit merging of dict and list facts.
 
 from ansible.plugins.action import ActionBase
 from ansible.errors import AnsibleError
+from ansible.utils.vars import isidentifier
 
 
 # Funky import dance for Ansible backwards compatitility (not sure if we
@@ -41,6 +42,8 @@ class ActionModule(ActionBase):
             raise AnsibleError("expected_type must be set ('dict' or 'list').")
         if not merged_var_name:
             raise AnsibleError("merged_var_name must be set")
+        if not isidentifier(merged_var_name):
+            raise AnsibleError("merged_var_name '%s' is not a valid identifier" % merged_var_name)
         if not suffix_to_merge.endswith('__to_merge'):
             raise AnsibleError("Merge suffix must end with '__to_merge', sorry!")
         if merged_var_name in all_keys:
