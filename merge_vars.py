@@ -33,6 +33,7 @@ class ActionModule(ActionBase):
         dedup = self._task.args.get('dedup', True)
         expected_type = self._task.args.get('expected_type')
         cacheable = bool(self._task.args.get('cacheable', False))
+        recursive_dict_merge = bool(self._task.args.get('recursive_dict_merge', False))
         all_keys = task_vars.keys()
 
         # Validate args
@@ -62,7 +63,7 @@ class ActionModule(ActionBase):
         elif isinstance(merge_vals[0], list):
             merged = merge_list(merge_vals, dedup)
         elif isinstance(merge_vals[0], dict):
-            merged = merge_dict(merge_vals)
+            merged = merge_dict(merge_vals, dedup, recursive_dict_merge)
         else:
             raise AnsibleError(
                 "Don't know how to merge variables of type: {}".format(type(merge_vals[0]))
@@ -79,14 +80,30 @@ class ActionModule(ActionBase):
         }
 
 
-def merge_dict(merge_vals):
+def merge_dict(merge_vals, dedup, recursive_dict_merge):
     """
     To merge dicts, just update one with the values of the next, etc.
     """
     check_type(merge_vals, dict)
     merged = {}
     for val in merge_vals:
-        merged.update(val)
+        if not recursive_dict_merge:
+          merged.update(val)
+        else:
+          # Recursive merging of dictionaries with overlapping keys:
+          #   LISTS: merge with merge_list
+          #   DICTS: recursively merge with merge_dict
+          #   any other types: replace (same as usual behaviour)
+          for key in val.keys():
+            if not key in merged:
+              # first hit of the value - just assign
+              merged[key]=val[key]
+            elif isinstance(merged[key], list):
+              merged[key]=merge_list([merged[key], val[key]], dedup)
+            elif isinstance(merged[key], dict):
+              merged[key]=merge_dict([merged[key], val[key]], dedup, recursive_dict_merge)
+            else:
+              merged[key]=val[key]
     return merged
 
 
