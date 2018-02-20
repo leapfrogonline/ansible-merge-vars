@@ -93,22 +93,22 @@ def merge_dict(merge_vals, dedup, recursive_dict_merge):
     merged = {}
     for val in merge_vals:
         if not recursive_dict_merge:
-          merged.update(val)
+            merged.update(val)
         else:
-          # Recursive merging of dictionaries with overlapping keys:
-          #   LISTS: merge with merge_list
-          #   DICTS: recursively merge with merge_dict
-          #   any other types: replace (same as usual behaviour)
-          for key in val.keys():
-            if not key in merged:
-              # first hit of the value - just assign
-              merged[key]=val[key]
-            elif isinstance(merged[key], list):
-              merged[key]=merge_list([merged[key], val[key]], dedup)
-            elif isinstance(merged[key], dict):
-              merged[key]=merge_dict([merged[key], val[key]], dedup, recursive_dict_merge)
-            else:
-              merged[key]=val[key]
+            # Recursive merging of dictionaries with overlapping keys:
+            #   LISTS: merge with merge_list
+            #   DICTS: recursively merge with merge_dict
+            #   any other types: replace (same as usual behaviour)
+            for key in val.keys():
+                if not key in merged:
+                    # first hit of the value - just assign
+                    merged[key] = val[key]
+                elif isinstance(merged[key], list):
+                    merged[key] = merge_list([merged[key], val[key]], dedup)
+                elif isinstance(merged[key], dict):
+                    merged[key] = merge_dict([merged[key], val[key]], dedup, recursive_dict_merge)
+                else:
+                    merged[key] = val[key]
     return merged
 
 
