@@ -1,0 +1,26 @@
+- name: Example of recursively merging dicts
+  hosts: localhost
+  gather_facts: false  # Speed up the example
+  vars: # Note that these could be definied anywhere in inventory
+    group1_users__to_merge:
+        users:
+          - bob
+          - henry
+        admins:
+          - bob
+    group2_users__to_merge:
+      users:
+        - sally
+        - jane
+      admins:
+        - sally
+  tasks:
+    - name: Merge users vars
+      merge_vars:
+        suffix_to_merge: users__to_merge
+        merged_var_name: merged_users
+        expected_type: dict
+        recursive_dict_merge: yes
+
+    - debug:
+        var: merged_users

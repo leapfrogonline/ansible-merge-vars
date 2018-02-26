@@ -37,6 +37,24 @@ def gen_dict_lists(num):
         for _ in range(num)
     ]
 
+def gen_list_dicts(num):
+    """
+    Generate num dict strategies of lists
+
+    """
+    return [
+        s.dictionaries(
+            keys=s.text(min_size=1),
+            values=s.lists(s.integers(),
+                           average_size=10,
+                           max_size=100
+                          ),
+            average_size=5,
+            max_size=20
+            )
+        for _ in range(num)
+    ]
+
 def gen_dicts(num):
     """
     Generate num list strategies of integers
@@ -156,4 +174,36 @@ class TestMergeVarsProperties(unittest.TestCase):
         merged_var = result['ansible_facts']['merged_var']
         self.assertTrue(
             any([merged_var == x for x in possibles])
+        )
+
+    @given(*gen_list_dicts(3))
+    @example({'entry1': [1, 2, 3]}, {'entry1:': [3, 4, 5]}, {'entry2': [4, 5, 6]})
+    def test_merge_rec_with_list_dicts(self, dict1, dict2, dict3):
+        task_args = {
+            'suffix_to_merge': 'whatever__to_merge',
+            'merged_var_name': 'merged_var',
+            'expected_type': 'dict',
+            'recursive_dict_merge': True,
+        }
+        task_vars = {
+            'var1_whatever__to_merge': dict1,
+            'var2_whatever__to_merge': dict2,
+            'var3_whatever__to_merge': dict3,
+        }
+
+        result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
+        merged_var = result['ansible_facts']['merged_var']
+
+        # check all keys are present
+        self.assertTrue(
+            all([k in merged_var.keys() for k in dict1.keys()+dict2.keys()+dict3.keys()])
+        )
+
+        # check all list values are present from all input dicts
+        self.assertTrue(
+            all(
+                [set(dict1[k]).issubset(set(merged_var[k])) for k in dict1.keys()] +
+                [set(dict2[k]).issubset(set(merged_var[k])) for k in dict2.keys()] +
+                [set(dict3[k]).issubset(set(merged_var[k])) for k in dict3.keys()]
+            )
         )

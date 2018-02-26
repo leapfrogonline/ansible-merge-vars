@@ -216,6 +216,73 @@ merged_ports:
 A note about `dedup`:
   * It has no effect when the merged vars are dictionaries.
 
+### Recursive merging ###
+
+When dealing with complex data structures, you may want to do a deep (recursive) merge.
+
+Suppose you have variables that define lists of users to add and select who should have admin privileges:
+
+```yaml
+users__someenvironment_users__to_merge:
+  users:
+    - bob
+    - henry
+  admins:
+    - bob
+```
+
+and
+
+```yaml
+users__somedatacenter_users__to_merge:
+  users:
+    - sally
+    - jane
+  admins:
+    - sally
+```
+
+You can request a recursive merge with:
+
+```yaml
+name: Merge user vars
+merge_vars:
+  suffix_to_merge: users__to_merge
+  merged_var_name: merged_users
+  expected_type: 'dict'
+  recursive_dict_merge: True
+```
+
+and get:
+
+```yaml
+merged_users:
+  users:
+    - bob
+    - henry
+    - sally
+    - jane
+  admins:
+    - bob
+    - sally
+```
+
+When merging dictionaries and the same key exists in both, the recursive merge checks the type of the value:
+* if the entry value is a list, it merges the values as lists (merge_list)
+* if the entry value is a dict, it merges the values (recursively) as dicts (merge_dict)
+* any other values: just replace (use last)
+
+### Module options ###
+
+| parameter | required | default | choices | comments |
+| --------- | -------- | ------- | ------- | -------- |
+| suffix_to_merge | yes |        |         | Suffix of variables to merge.  Must end with `__to_merge`. |
+| merged_var_name | yes |        | <identifier> | Name of the target variable. |
+| expected_type | yes |          | dict, list | Expected type of the merged variable (one of dict or list) |
+| dedup     | no       | yes     | yes / no | Whether to remove duplicates from lists (arrays) after merging. |
+| cacheable | no       | no      | yes / no | If set to `yes`, the merged variable will be stored in the facts cache |
+| recursive_dict_merge | no | no | yes / no | Whether to do deep (recursive) merging of dictionaries, or just merge only at top level and replace values |
+
 ## Verbosity
 
 Running ansible-playbook with `-v` will cause this plugin to output the order in
