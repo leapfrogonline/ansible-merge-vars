@@ -57,7 +57,12 @@ class ActionModule(ActionBase):
 
         display.v("Merging vars in this order: {}".format(keys))
 
-        merge_vals = [task_vars[key] for key in keys]
+        # We need to render any jinja in the merged var now, because once it
+        # leaves this plugin, ansible will cleanse it by turning any jinja tags
+        # into comments.
+        # And we need it done before merging the variables,
+        # in case any structured data is specified with templates.
+        merge_vals = [self._templar.template(task_vars[key]) for key in keys]
 
         # Dispatch based on type that we're merging
         if merge_vals == []:
@@ -74,10 +79,6 @@ class ActionModule(ActionBase):
                 "Don't know how to merge variables of type: {}".format(type(merge_vals[0]))
             )
 
-        # We need to render any jinja in the merged var now, because once it
-        # leaves this plugin, ansible will cleanse it by turning any jinja tags
-        # into comments.
-        merged = self._templar.template(merged)
         return {
             'ansible_facts': {merged_var_name: merged},
             'ansible_facts_cacheable': cacheable,
