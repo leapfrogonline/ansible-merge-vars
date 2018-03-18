@@ -64,6 +64,25 @@ class TestMergeVars(unittest.TestCase):
         self.assertIn('woohoo', merged_var)
         self.assertIn({'some_key': u'woohoo-bar'}, merged_var)
 
+    def test_render_complex_jinja(self):
+        task_args = {
+            'suffix_to_merge': 'whatever__to_merge',
+            'merged_var_name': 'merged_var',
+            'expected_type': 'dict',
+            'recursive_dict_merge': True,
+        }
+        task_vars = {
+            'some_var': '{{ {1: 1, 2: 2} }}',
+            'some_other_var': '{{ {3:3} }}',
+            'var1_whatever__to_merge': {'foo': '{{ some_var }}'},
+            'var2_whatever__to_merge': {'foo': '{{ some_other_var }}'},
+        }
+
+        result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
+        merged_var = result['ansible_facts']['merged_var']
+        expected = {'foo': {1: 1, 2: 2, 3: 3}}
+        self.assertEqual(expected, merged_var)
+
     def test_dedupe_preserves_order(self):
         """
         Order of dedup'd lists is preserved. This too is a bit hairy to test
