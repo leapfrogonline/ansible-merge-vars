@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is (loosely) based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.1
+
+Thanks again to @vladimir-mencl-eresearch for fixing a bug where dicts or lists definied in Jinja wouldn't be recursively merged.
+
 ## 2.0.0
 
 Big thanks to @vladimir-mencl-eresearch for these additions and improvements!
