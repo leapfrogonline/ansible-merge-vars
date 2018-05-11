@@ -15,7 +15,7 @@ from ansible.utils.vars import isidentifier
 try:
     from __main__ import display
 except ImportError:
-    from ansible.utils.display import Display # pylint: disable=ungrouped-imports
+    from ansible.utils.display import Display  # pylint: disable=ungrouped-imports
     display = Display()
 
 
@@ -69,7 +69,7 @@ class ActionModule(ActionBase):
             if expected_type == 'list':
                 merged = []
             else:
-                merged = {} # pylint: disable=redefined-variable-type
+                merged = {}  # pylint: disable=redefined-variable-type
         elif isinstance(merge_vals[0], list):
             merged = merge_list(merge_vals, dedup)
         elif isinstance(merge_vals[0], dict):

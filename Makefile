@@ -1,39 +1,21 @@
-PYTHON := env/bin/python
-PIP := env/bin/pip
-PYLINT := env/bin/pylint
-
 default: test-all
 
-.build-timestamps:
-	mkdir .build-timestamps
+deps:
+	pipenv install
 
-env:
-	virtualenv --no-site-packages --python python2.7 env
+generate-tox-config: deps
+	pipenv run python bin/generate_tox_config.py
 
-.build-timestamps/packaging-deps: requirements/packaging.txt env | .build-timestamps
-	$(PIP) install -U -r requirements/packaging.txt
-	touch $@
+prep-release: generate-tox-config
 
-.build-timestamps/dev-deps: .build-timestamps/packaging-deps requirements/dev.txt env | .build-timestamps
-	$(PIP) install -U -r requirements/dev.txt
-	touch $@
+lint:
+	pipenv run tox -e lint
 
-packaging-deps: $(ENV) .build-timestamps/packaging-deps
-dev-deps: $(ENV) .build-timestamps/dev-deps
+test-all: generate-tox-config 
+	pipenv run detox
 
-lint: .build-timestamps/dev-deps
-	$(PYLINT) merge_vars.py tests
-
-test: .build-timestamps/dev-deps
-	$(PYTHON) -m unittest discover -s tests
-
-examples: .build-timestamps/dev-deps
-	env/bin/ansible-playbook -v examples/*_playbook.yml
-
-test-all: lint test examples
+ci-test: deps
+	pipenv run tox
 
 clean:
-	rm -rf env
-	rm -rf .build-timestamps
-
-.PHONY: default clean test packaging-deps dev-deps lint test-all examples
+	rm -rf .tox .hypothesis

@@ -196,7 +196,10 @@ class TestMergeVarsProperties(unittest.TestCase):
 
         # check all keys are present
         self.assertTrue(
-            all([k in merged_var.keys() for k in dict1.keys()+dict2.keys()+dict3.keys()])
+            all([
+                k in merged_var.keys()
+                for k in list(dict1.keys()) + list(dict2.keys()) + list(dict3.keys())
+            ])
         )
 
         # check all list values are present from all input dicts
