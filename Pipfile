@@ -13,7 +13,6 @@ requests = "*"
 "Jinja2" = "*"
 
 [dev-packages]
-ipdb = "*"
 
 [requires]
 python_version = "3.6"

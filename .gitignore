@@ -1,6 +1,3 @@
-# Build process
-.build-timestamps
-
 # tmp editor files
 .#*
 
@@ -93,3 +90,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Generated MANIFEST
+MANIFEST
