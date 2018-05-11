@@ -31,7 +31,6 @@ def filter_releases(releases, min_release, incompatible_releases):
             and finished(release)  # noqa
             and release not in incompatible_releases  # noqa
     ]
-
     return sorted(relevant_releases, key=LooseVersion)
 
 
@@ -61,10 +60,11 @@ def main():
     with open(TOX_TMPL, 'r') as f:
         tmpl = Template(f.read())
 
+    import pdb; pdb.set_trace()
     generated = tmpl.substitute(
         py2_releases=','.join(py2_releases),
         py3_releases=','.join(py3_releases),
-        ansible_dep_specs=tox_dep_specs(releases)
+        ansible_dep_specs=tox_dep_specs(py2_releases)
     )
     print(f'\nWriting {TOX_INI}:\n{generated}')
 
