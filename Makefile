@@ -15,7 +15,9 @@ test-all:
 	pipenv run detox
 
 ci-test: deps
-	pipenv run tox
+	pipenv run detox
+# ci-test: deps
+#         pipenv run tox
 
 clean:
 	rm -rf .tox .hypothesis
