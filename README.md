@@ -18,7 +18,10 @@ provisioning.
 
 ## Requirements
 
-This plugin requires Ansible version >= 2.1.0.0
+This plugin requires Ansible release >= 2.1.0.0.
+
+Additionally, there are some releases of Ansible for which this plugin does not work because of bugs in those releases:
+  * [Incompatible Ansible Releases](incompatible_ansible_releases.txt)
 
 ## Installation
 
@@ -44,7 +47,7 @@ So, from the root of your Ansible playbook repository:
    ```
    mkdir -p library
    ```
-    
+
 1. Create an empty `merge_vars.py` file in your `library` directory:
 
     ```
@@ -150,7 +153,7 @@ open_ports__someenvironment_open_ports__to_merge:
   - 2
   - 3
 ```
-and a `somedatacenter group with an `open_ports.yml` file that looks like this:
+and a `somedatacenter` group with an `open_ports.yml` file that looks like this:
 
 ```yaml
 open_ports__somedatacenter_open_ports__to_merge:
@@ -331,15 +334,63 @@ To run a single example, assuming you have your virtualenv and dependencies that
 the above make command generates:
 
     env/bin/ansible-playbook examples/merge_lists_playbook.yml
-    
+
 ## Contributing
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 These are the only prerequisites to working on this project locally:
 
-  1. You have python 2.7 installed and a `python2.7` executable is on your path.
-  1. You have virtualenv installed and a `virtualenv` executable on your path.
+  1. You have [Pipenv](https://docs.pipenv.org) installed.
+  1. You have the Python versions in the [.python-version](.python-version)
+     installed and on your path (probably with
+     [pyenv](https://github.com/pyenv/pyenv)
+
+A development workflow may look like this:
+
+  1. Clone this repository
+  1. Run `make deps`
+     * This will use [Pipenv](https://docs.pipenv.org) to install all of the
+       dependencies needed to build a release and run tests.
+  1. Run `make test-all`
+     * This will use [tox](https://tox.readthedocs.io/en/latest/) to run the
+       tests against different combinations of python versions and ansible
+       releases.
+  1. Running all the tests against all of the combinations of Ansible releases
+     and Python versions takes a lot of time.  To run aginst just one
+     combination, you can list all of the combinations available and tell tox
+     to only run the tests for one combination:
+
+     ```
+    $ pipenv run tox -l
+
+    py27-ansible-2.1.0.0
+    py27-ansible-2.1.1.0
+    py27-ansible-2.1.2.0
+    py27-ansible-2.1.3.0
+    py27-ansible-2.2.0.0
+    py27-ansible-2.2.1.0
+    py27-ansible-2.2.2.0
+    py27-ansible-2.2.3.0
+    py27-ansible-2.3.0.0
+    py27-ansible-2.4.0.0
+    py27-ansible-2.4.1.0
+    py27-ansible-2.4.2.0
+    py27-ansible-2.4.3.0
+    py27-ansible-2.4.4.0
+    py27-ansible-2.5.0
+    py27-ansible-2.5.1
+    py27-ansible-2.5.2
+    py35-ansible-2.5.0
+    py35-ansible-2.5.1
+    py35-ansible-2.5.2
+    py36-ansible-2.5.0
+    py36-ansible-2.5.1
+    py36-ansible-2.5.2
+
+    $ pipenv run tox -e py36-ansible-2.5.2
+    ...
+    ```
 
 If you have any ideas about things to add or improve, or find any bugs to fix, we're all ears!  Just a few guidelines:
 
@@ -348,10 +399,10 @@ If you have any ideas about things to add or improve, or find any bugs to fix, w
   
      To run the example-based and property-based tests, run `make test` from the
      root of this repository.
-     
+
   1. Please make sure that `make test-all` exits zero. This runs a code linter,
      all of the tests, and all of the examples.
-  
+
   1. If the linting seems too annoying, it probably is! Feel free to do what you
      need to do in the `.pylintrc` at the root of this repository to maintain
      sanity. Add it to your PR, and we'll most likely take it.

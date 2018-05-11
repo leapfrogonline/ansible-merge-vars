@@ -1,28 +1,17 @@
-PYTHON := $(VIRTUAL_ENV)/bin/python
-PIP := $(VIRTUAL_ENV)/bin/pip
-PYLINT := $(VIRTUAL_ENV)/bin/pylint
+default: generate-tox-config test-all
 
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+deps:
+	pipenv install
 
-default: test-all
+generate-tox-config: deps
+	pipenv run python bin/generate_tox_config.py
 
-dev-deps: requirements/dev.txt env
-	$(PIP) install -U -r requirements/dev.txt
+prep-release: generate-tox-config
 
-lint: dev-deps
-	$(PYLINT) merge_vars.py tests
+lint:
+	pipenv run tox -e lint
 
-test: dev-deps
-	$(PYTHON) -m unittest discover -s tests
-
-examples: dev-deps
-	env/bin/ansible-playbook -v examples/*_playbook.yml
-
-test-all: lint test examples
-
+test-all: deps
+	pipenv run detox
 clean:
-	rm -rf env ci-env
-	rm -rf .build
-
-.PHONY: default clean test packaging-deps dev-deps lint test-all examples
+	rm -rf .tox .hypothesis

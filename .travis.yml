@@ -1,6 +1,8 @@
 language: python
 python:
   - "2.7"
+  - "3.5"
+  - "3.6"
 
-install: true  # The test command will install all necessary deps
+install: pip install pipenv tox-travis  # The test command will install all necessary other deps
 script: make test-all

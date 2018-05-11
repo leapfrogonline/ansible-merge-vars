@@ -1,0 +1,32 @@
+[tox]
+envlist =
+  {py27}-ansible-{$py2_releases}
+  {py35,py36}-ansible-{$py3_releases}
+  lint
+
+[testenv]
+whitelist_externals = /usr/bin/make
+
+basepython =
+  py27: python2.7
+  py35: python3.5
+  py36: python3.6
+
+deps =
+  hypothesis>=3.6,<3.7
+  mock>=2,<3
+$ansible_dep_specs
+
+commands =
+  python -m unittest discover -s tests
+  /bin/bash -c 'ansible-playbook -v {toxinidir}/examples/*_playbook.yml'
+
+[testenv:lint]
+skipdist = true
+basepython = python
+commands = pylint merge_vars.py tests
+deps =
+  hypothesis>=3.6,<3.7
+  mock>=2,<3
+  ansible==2.5.2
+  pylint==1.6.5

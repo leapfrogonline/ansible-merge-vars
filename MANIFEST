@@ -8,4 +8,6 @@ examples/merge_lists_no_dedup_playbook.yml
 examples/merge_recursive_playbook.yml
 examples/action_plugins/merge_vars.py
 examples/action_plugins/merge_vars.pyc
+examples/action_plugins/__pycache__/merge_vars.cpython-35.pyc
+examples/action_plugins/__pycache__/merge_vars.cpython-36.pyc
 examples/library/merge_vars
