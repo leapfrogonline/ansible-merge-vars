@@ -11,7 +11,11 @@ prep-release: generate-tox-config
 lint:
 	pipenv run tox -e lint
 
-test-all: deps
+test-all:
 	pipenv run detox
+
+ci-test: deps
+	pipenv run tox
+
 clean:
 	rm -rf .tox .hypothesis
