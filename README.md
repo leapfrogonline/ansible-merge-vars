@@ -356,10 +356,14 @@ A development workflow may look like this:
      * This will use [tox](https://tox.readthedocs.io/en/latest/) to run the
        tests against different combinations of python versions and ansible
        releases.
-  1. Running all the tests against all of the combinations of Ansible releases
-     and Python versions takes a lot of time.  To run aginst just one
-     combination, you can list all of the combinations available and tell tox
-     to only run the tests for one combination:
+     * It will also use [a script](bin/generate_tox_config.py) to query
+       [PyPI](https://pypi.python.org) for the latest versions of Ansible, and
+       add them to the `tox.ini` file if they're not there.
+
+  1. Updating the `tox.ini` file and running all the tests against all of the
+     combinations of Ansible releases and Python versions takes a lot of time.
+     To run aginst just one combination, you can list all of the combinations
+     available and tell tox to only run the tests for one combination:
 
      ```
     $ pipenv run tox -l
@@ -370,23 +374,13 @@ A development workflow may look like this:
     py27-ansible-2.1.3.0
     py27-ansible-2.2.0.0
     py27-ansible-2.2.1.0
-    py27-ansible-2.2.2.0
-    py27-ansible-2.2.3.0
-    py27-ansible-2.3.0.0
-    py27-ansible-2.4.0.0
-    py27-ansible-2.4.1.0
-    py27-ansible-2.4.2.0
-    py27-ansible-2.4.3.0
-    py27-ansible-2.4.4.0
-    py27-ansible-2.5.0
-    py27-ansible-2.5.1
-    py27-ansible-2.5.2
-    py35-ansible-2.5.0
+    ...
     py35-ansible-2.5.1
     py35-ansible-2.5.2
     py36-ansible-2.5.0
     py36-ansible-2.5.1
     py36-ansible-2.5.2
+    ...
 
     $ pipenv run tox -e py36-ansible-2.5.2
     ...
@@ -396,12 +390,10 @@ If you have any ideas about things to add or improve, or find any bugs to fix, w
 
   1. Please write or update tests (either example-based tests, property-based
      tests, or both) for any code that you add, change, or remove.
-  
-     To run the example-based and property-based tests, run `make test` from the
-     root of this repository.
 
   1. Please make sure that `make test-all` exits zero. This runs a code linter,
-     all of the tests, and all of the examples.
+     all of the tests, and all of the examples against all supported versions
+     of Python and Ansible.
 
   1. If the linting seems too annoying, it probably is! Feel free to do what you
      need to do in the `.pylintrc` at the root of this repository to maintain

@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+
+"""
+* Queries PyPI for Ansible versions > 2.0
+* Adds all Ansible versions appropriate for each Python version to the tox.ini
+* Does not add Ansible versions that are known not to work
+"""
+
 from distutils.version import LooseVersion
 import os
 import re
