@@ -10,7 +10,6 @@ wheel = "*"
 tox = "*"
 detox = "*"
 requests = "*"
-"Jinja2" = "*"
 
 [dev-packages]
 
