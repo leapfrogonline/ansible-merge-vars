@@ -60,7 +60,6 @@ def main():
     with open(TOX_TMPL, 'r') as f:
         tmpl = Template(f.read())
 
-    import pdb; pdb.set_trace()
     generated = tmpl.substitute(
         py2_releases=','.join(py2_releases),
         py3_releases=','.join(py3_releases),
