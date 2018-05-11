@@ -1,3 +1,0 @@
-include tox.ini
-include README.md
-graft examples
