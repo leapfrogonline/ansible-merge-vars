@@ -28,7 +28,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords='ansible plugin',  # Optional
-    py_modules=["merge_vars"],
+    py_modules=["ansible_merge_vars"],
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/leapfrogonline/ansible-merge-vars/issues',
         'Source': 'https://github.com/leapfrogonline/ansible-merge-vars/',
