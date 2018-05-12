@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is (loosely) based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.0
+
+This plugin is now installable from PyPI, which will make it easier to keep
+updated with bug fixes and new features.  As a result, the installation process
+is different.  The README has the updated installation process.  If you are
+currently using this plugin, you will want to install this version using the
+new installation process.
+
 ## 2.0.1
 
 Thanks again to @vladimir-mencl-eresearch for fixing a bug where dicts or lists definied in Jinja wouldn't be recursively merged.

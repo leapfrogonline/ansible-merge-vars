@@ -1,8 +1,16 @@
 language: python
 python:
-  - "2.7"
-  - "3.5"
-  - "3.6"
-
-install: pip install pipenv tox-travis  # The test command will install all necessary other deps
+- '2.7'
+- '3.5'
+- '3.6'
+install: pip install pipenv tox-travis
 script: make ci-test
+
+deploy:
+  provider: pypi
+  user: dfuchs
+  password:
+    secure: CZcHt9q4RND+Ttt0CxBtArBCd8X88MmyzNSVc+bH3tH0XaH2muF4NOH2VX7zH7ESUvHjj/PzBnZ29We3tKnKPbV9fZHI/fnxKAwi+8GlfnNdl3KiCgjvzgkFiz1u5PwYJHSRplBnd8mlPSo9JWNKxXKDiftppqd2nURlnSntHBoYfdhUoX5HOoGdd/pSu4M701GFCtEbeuqcotlk/sRKZFxb7m5cPPph9QfXm+Le4W13a8eCz3uRGC304x/+QkHunay3boLDBSZwZA0vRq7NzhXWo59IkAwJIMAgKlEs/Qjz2ny8hhpxi/2NBh920+vFOT22mkb74rMHES/iNDx1XS6m+VX5jzLICVeZQof5U3vm/OCXq7HySbmv+NvX6jv5FexiMFuyWv4ysnzcWSEcI90nRSjsQWfH3pTdeYlLnpC/BwnMYjDNSXUzHjtRDAn9hbusnVIMlAMWcxquQP4y31GfIFOvQxeTDU5TMqZ2Ywpae6oGALjbIxtJypznWeODIPzpZ5eLHtleBhnjwOG3ASu0gx0awgRl+BlzV0claUJtfXBT9TkICOeDntV4P00V1yTCxuWHNVV9IckzvCcP/rFCDgxR5I5upGHqWHhRAvllrNEckhXiBH1EtSi12EB9blhxfeP2D+UBxFY3/gMAXXHpJC9rx2oLnKpvSuqQ7yM=
+  distributions: "sdist bdist_wheel"
+  on:
+    tags: true
