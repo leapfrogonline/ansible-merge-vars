@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(
-    name='ansible-merge-vars',
+    name='ansible_merge_vars',
     version='2.0.0',
     description='An Ansible action plugin to explicitly merge inventory variables',  # noqa
     long_description=long_description,
@@ -28,7 +28,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords='ansible plugin',  # Optional
-    py_modules=["ansible_merge_vars"],
+    py_modules=["merge_vars"],
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/leapfrogonline/ansible-merge-vars/issues',
         'Source': 'https://github.com/leapfrogonline/ansible-merge-vars/',
