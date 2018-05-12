@@ -7,7 +7,7 @@ from ansible.template import Templar
 from ansible.parsing.dataloader import DataLoader
 import mock
 
-from merge_vars import ActionModule as MV
+from ansible_merge_vars import ActionModule as MV
 
 
 def make_and_run_plugin(task_args, task_vars):

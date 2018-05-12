@@ -4,7 +4,7 @@ deps:
 	pipenv install
 
 generate-tox-config: deps
-	pipenv run python bin/generate_tox_config.py
+	pipenv run python tests/bin/generate_tox_config.py
 
 prep-release: generate-tox-config
 

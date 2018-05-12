@@ -1,0 +1,13 @@
+include *.md
+include *.txt
+include .gitignore
+include .pylintrc
+include .python-version
+include .travis.yml
+include Makefile
+include Pipfile
+include Pipfile.lock
+include tox.ini
+include tox.ini.tmpl
+recursive-include examples *.py *.yml merge_vars
+recursive-include tests *.py

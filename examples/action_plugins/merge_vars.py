@@ -1,1 +1,1 @@
-../../merge_vars.py
+from ansible_merge_vars import ActionModule
