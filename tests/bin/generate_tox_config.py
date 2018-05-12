@@ -14,7 +14,7 @@ from string import Template
 import requests
 
 
-ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
+ROOT_DIR = os.path.join(os.path.dirname(__file__), '..', '..')
 TOX_TMPL = os.path.join(ROOT_DIR, 'tox.ini.tmpl')
 TOX_INI = os.path.join(ROOT_DIR, 'tox.ini')
 INCOMPATIBLE_FILE = os.path.join(ROOT_DIR, 'incompatible_ansible_releases.txt')

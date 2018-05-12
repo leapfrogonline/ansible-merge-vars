@@ -25,34 +25,43 @@ Additionally, there are some releases of Ansible for which this plugin does not 
 
 ## Installation
 
-By default, Ansible will look for action plugins in an `action_plugins` folder
-adjacent to the running playbook. For more information on this, or to change the
-location where ansible looks for action plugins,
-see
-[the Ansible docs](https://docs.ansible.com/ansible/dev_guide/developing_plugins.html#distributing-plugins).
+1. Pick a name that you want to use to call this plugin in Ansible playbooks.
+   This documentation assumes you're using the name `merge_vars`.
+1. `pip install ansible_merge_vars`
+1. Create an `action_plugins` directory in the directory in which you run Ansible.
 
-Ansible action plugins are usually paired with modules (which run on the hosts being provisioned), and Ansible will automatically run an action plugin when you call of a module of the same name in a task.  Since we want to be able to call this action plugin by its name (`merge_vars`) in our tasks, we need an empty file called `merge_vars` in the place where ansible checks for custom modules; by default, this is a `library` directory adjacent to the running playbook.
-
-So, from the root of your Ansible playbook repository:
-
-1. Create the `action_plugins` directory if it's not created yet:
-
-   ```
-   mkdir -p action_plugins
-   ```
-
-1. Copy the [merge_vars.py](merge_vars.py) file to your `action_plugins` directory.
-1. Create the `library` directory if it's not created yet:
+   By default, Ansible will look for action plugins in an `action_plugins`
+   folder adjacent to the running playbook. For more information on this, or to
+   change the location where ansible looks for action plugins, see [the Ansible
+   docs](https://docs.ansible.com/ansible/dev_guide/developing_plugins.html#distributing-plugins).
+1. Create a file called `merge_vars.py` (or whatever name you picked) in the
+   `action_plugins` directory, with one line:
 
    ```
-   mkdir -p library
+   from ansible_merge_vars import ActionModule
    ```
+1. For Ansible less than 2.4:
 
-1. Create an empty `merge_vars.py` file in your `library` directory:
+   1. Create the `library` directory if it's not created yet:
+ 
+      ```
+      mkdir -p library
+      ```
 
-    ```
-    touch library/merge_vars
-    ```
+   1. Create an empty `merge_vars` (or whatever name you picked) file in your `library` directory:
+
+       ```
+       touch library/merge_vars
+       ```
+
+  Ansible action plugins are usually paired with modules (which run on the
+  hosts being provisioned), and Ansible will automatically run an action plugin
+  when you call of a module of the same name in a task.  Prior to Ansible 2.4,
+  if you want to call an action plugin by its name (`merge_vars`) in our tasks,
+  you need an empty file called `merge_vars` in the place where ansible checks
+  for custom modules; by default, this is a `library` directory adjacent to the
+  running playbook.
+
 
 ## Usage
 
