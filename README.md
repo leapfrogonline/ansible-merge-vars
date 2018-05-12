@@ -1,6 +1,7 @@
-# merge_vars: An action plugin for Ansible
+# ansible_merge_vars: An action plugin for Ansible
 
-[![Build Status](https://travis-ci.org/leapfrogonline/ansible-merge-vars.svg?branch=master)](https://travis-ci.org/leapfrogonline/ansible-merge-vars)
+![Travis](https://img.shields.io/travis/leapfrogonline/ansible-merge-vars.svg)
+![PyPI](https://img.shields.io/pypi/v/ansible_merge_vars.svg)
 
 An Ansible plugin to merge all variables in context with a certain suffix (lists
 or dicts only) and create a new variable that contains the result of this merge.
