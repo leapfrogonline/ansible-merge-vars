@@ -2,8 +2,6 @@ include *.md
 include *.txt
 include .gitignore
 include .pylintrc
-include .python-version
-include .travis.yml
 include Makefile
 include Pipfile
 include Pipfile.lock
