@@ -21,8 +21,8 @@ setup(
     classifiers=[  # Optional
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'Topic :: Systems :: Systems Administration :: Configuration Management :: Ansible Plugins',  # noqa
-        'License :: OSI Approved :: Apache Software License'
+        'Topic :: System :: Systems Administration',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',

@@ -6,12 +6,13 @@ name = "pypi"
 [packages]
 pip = "*"
 setuptools = "*"
-wheel = "*"
 tox = "*"
 detox = "*"
 requests = "*"
 
 [dev-packages]
+wheel = "*"
+twine = "*"
 
 [requires]
 python_version = "3.6"
