@@ -40,7 +40,7 @@ Additionally, there are some releases of Ansible for which this plugin does not 
    ```
    from ansible_merge_vars import ActionModule
    ```
-1. For Ansible < 2.4:
+1. For Ansible less than 2.4:
 
    1. Create the `library` directory if it's not created yet:
  
