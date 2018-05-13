@@ -325,25 +325,11 @@ localhost                  : ok=6    changed=0    unreachable=0    failed=0
 
 ## Example Playbooks
 
-There are some example playbooks in the [examples folder](examples) in this
-repository. Prerequisites:
-
-  1. You have python 2.7 installed and a `python2.7` executable is on your path.
-  1. You have the virtualenv tool installed and a `virtualenv` executable on
-     your path.
- 
-To run all of the example playbooks (from the root of this repository):
-
-    make examples
-
-This will create a virtualenv, install the relevant dependencies into it, and
-run each example playbook using the `ansible-playbook` executable in the
-virtualenv.
-
-To run a single example, assuming you have your virtualenv and dependencies that
-the above make command generates:
-
-    env/bin/ansible-playbook examples/merge_lists_playbook.yml
+There are some example playbooks in the `examples` directory that show how the
+various features work in the context of an actual Ansible playbook.  These
+example playbooks are run as part of the test suite for this plugin; if you
+would like to run them yourself, please see the [Contributing](#contributing)
+section for instructions on how to run the test suite.
 
 ## Contributing
 
@@ -400,6 +386,10 @@ If you have any ideas about things to add or improve, or find any bugs to fix, w
 
   1. Please write or update tests (either example-based tests, property-based
      tests, or both) for any code that you add, change, or remove.
+
+  1. Please add an example playbook or update an existing example playbook in
+     the `examples` folder.  These example playbooks serve as the integration
+     tests for this plugin.
 
   1. Please make sure that `make test-all` exits zero. This runs a code linter,
      all of the tests, and all of the examples against all supported versions
