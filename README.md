@@ -13,6 +13,7 @@ provisioning.
 - [Usage](#usage)
   - [Merging dicts](#merging-dicts)
   - [Merging lists](#merging-lists)
+  - [Merging lists with split filter var](#Merging-lists-with-split-filter-var)
 - [Verbosity](#verbosity)
 - [Example Playbooks](#example-playbooks)
 - [Contributing](#contributing)
