@@ -31,6 +31,14 @@ class ActionModule(ActionBase):
     def run(self, tmp=None, task_vars=None):
         suffix_to_merge = self._task.args.get('suffix_to_merge', '')
         merged_var_name = self._task.args.get('merged_var_name', '')
+
+        split_filter_var = self._task.args.get('split_filter_var', '')
+        ''' Split filter var is used when have two list with equal content but this lists have a minimal variablitys,
+         For example, you have two list with names the packages apt, this name to be php5 and php5=2.3
+         In the normal case using the dedup funcion you have at finish task a list with php5 and php5=2.3 but you only need the php5=2.3
+         Using the split filter var you get only the php5=2.3 if this exists in the last list
+         You determine which is you delimiter util in this case is '=' '''
+
         dedup = self._task.args.get('dedup', True)
         expected_type = self._task.args.get('expected_type')
         cacheable = bool(self._task.args.get('cacheable', False))
@@ -40,6 +48,12 @@ class ActionModule(ActionBase):
         # Validate args
         if expected_type not in ['dict', 'list']:
             raise AnsibleError("expected_type must be set ('dict' or 'list').")
+
+        if len(split_filter_var) > 0 and expected_type != 'list':
+            raise AnsibleError("split_filter_var only used with lists")
+        if len(split_filter_var) > 0 and dedup != True:
+            raise AnsibleError("split_filter_var only used when dedup is true")	
+	
         if not merged_var_name:
             raise AnsibleError("merged_var_name must be set")
         if not isidentifier(merged_var_name):
@@ -62,8 +76,9 @@ class ActionModule(ActionBase):
         # into comments.
         # And we need it done before merging the variables,
         # in case any structured data is specified with templates.
-        merge_vals = [self._templar.template(task_vars[key]) for key in keys]
 
+        merge_vals = [self._templar.template(task_vars[key]) for key in keys]
+        
         # Dispatch based on type that we're merging
         if merge_vals == []:
             if expected_type == 'list':
@@ -71,7 +86,7 @@ class ActionModule(ActionBase):
             else:
                 merged = {}  # pylint: disable=redefined-variable-type
         elif isinstance(merge_vals[0], list):
-            merged = merge_list(merge_vals, dedup)
+            merged = merge_list(merge_vals, dedup, split_filter_var, self._templar.template(task_vars[keys[-1]]))
         elif isinstance(merge_vals[0], dict):
             merged = merge_dict(merge_vals, dedup, recursive_dict_merge)
         else:
@@ -113,15 +128,27 @@ def merge_dict(merge_vals, dedup, recursive_dict_merge):
     return merged
 
 
-def merge_list(merge_vals, dedup):
+def merge_list(merge_vals, dedup, split_filter_var, priority_list):
     """ To merge lists, just concat them. Dedup if wanted. """
     check_type(merge_vals, list)
     merged = flatten(merge_vals)
     if dedup:
         merged = deduplicate(merged)
+        if len(split_filter_var) > 0:
+            merged = rm_split_filter_var(split_filter_var, merged, priority_list)
     return merged
 
-
+def rm_split_filter_var(split_filter_var, merged, priority_list):
+    for item_pl in priority_list:
+        for item_m in merged:
+            split_var = item_pl.split(split_filter_var)[0]
+            key_split = item_m.split(split_filter_var)[0]
+            if split_var == item_m or split_var == key_split:
+                if item_pl != item_m:
+                    merged.remove(item_m)
+                    display.v("Remplace: {} by {}".format(item_m, item_pl))
+    return merged
+    
 def check_type(mylist, _type):
     """ Ensure that all members of mylist are of type _type. """
     if not all([isinstance(item, _type) for item in mylist]):

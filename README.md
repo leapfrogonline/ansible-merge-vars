@@ -292,6 +292,7 @@ When merging dictionaries and the same key exists in both, the recursive merge c
 | suffix_to_merge | yes |        |         | Suffix of variables to merge.  Must end with `__to_merge`. |
 | merged_var_name | yes |        | <identifier> | Name of the target variable. |
 | expected_type | yes |          | dict, list | Expected type of the merged variable (one of dict or list) |
+| split_filter_var | no |          | character| Expected for a character to divide and buy the data|
 | dedup     | no       | yes     | yes / no | Whether to remove duplicates from lists (arrays) after merging. |
 | cacheable | no       | no      | yes / no | If set to `yes`, the merged variable will be stored in the facts cache |
 | recursive_dict_merge | no | no | yes / no | Whether to do deep (recursive) merging of dictionaries, or just merge only at top level and replace values |
