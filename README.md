@@ -229,6 +229,98 @@ merged_ports:
 A note about `dedup`:
   * It has no effect when the merged vars are dictionaries.
 
+### Merging lists with split filter var
+You can used the split filter var function for remove variables repeat in your list with diferents formats.
+
+In this case i have two list with apt package names, the fist list pertain to group and second list pertain to host, they have a equals packages but this have a diferentes versions or no have a versión.
+This function maintains the variable exists in the host variable file.
+
+So here have a example.
+
+Have this packages for group
+
+```yaml
+apt_packages__to_merge:
+  - 'acl'
+  - 'apache2-mpm-prefork'
+  - 'ca-certificates'
+  - 'libapache2-mod-php5'
+  - 'libcurl3'
+  - 'php5'
+  - 'php5-curl'
+  - 'php5-fpm'
+  - 'php5-snmp'
+  - 'liboping0'
+  - 'heirloom-mailx'
+  - 'apcupsd'
+  - 'gnuplot-nox=4.6.6-1~bpo70+1'
+  - 'iperf'
+  - 'xmlstarlet=15.2'
+```
+
+This list is for host 
+```yaml
+---
+apt_host_packages__to_merge:
+  - 'xmlstarlet=10.1.2'
+  - 'php5=1.3'
+  - 'gnuplot-nox'
+``` 
+
+This is task:
+```yaml
+tasks:
+  - name: Merge with split filter var test
+    merge_vars:
+      suffix_to_merge: packages__to_merge
+      merged_var_name: packages
+      split_filter_var: "="
+      expected_type: 'list'
+``` 
+
+OUTPUT:
+```
+  "acl",
+  "apache2-mpm-prefork", 
+  "ca-certificates", 
+  "libapache2-mod-php5", 
+  "libcurl3", 
+  "php5-curl", 
+  "php5-fpm", 
+  "php5-snmp", 
+  "liboping0", 
+  "heirloom-mailx", 
+  "apcupsd", 
+  "iperf", 
+  "xmlstarlet=10.1.2", 
+  "php5=1.3", 
+  "gnuplot-nox"
+```
+
+Using only dedup function you format output with repeate variables, this is example:
+```
+  "acl",
+  "apache2-mpm-prefork", 
+  "ca-certificates", 
+  "libapache2-mod-php5", 
+  "libcurl3",
+  "php5",
+  "php5-curl", 
+  "php5-fpm", 
+  "php5-snmp", 
+  "liboping0", 
+  "heirloom-mailx", 
+  "apcupsd", 
+  "iperf",
+  "xmlstarlet=15.2"
+  "xmlstarlet=10.1.2", 
+  "php5=1.3",
+  "gnuplot-nox=4.6.6-1~bpo70+1",
+  "gnuplot-nox"
+```
+
+
+
 ### Recursive merging ###
 
 When dealing with complex data structures, you may want to do a deep (recursive) merge.
@@ -292,7 +384,7 @@ When merging dictionaries and the same key exists in both, the recursive merge c
 | suffix_to_merge | yes |        |         | Suffix of variables to merge.  Must end with `__to_merge`. |
 | merged_var_name | yes |        | <identifier> | Name of the target variable. |
 | expected_type | yes |          | dict, list | Expected type of the merged variable (one of dict or list) |
-| split_filter_var | no |          | character| Expected for a character to divide and buy the data|
+| split_filter_var | no |          | character| Expected for a character to divide and compare the data|
 | dedup     | no       | yes     | yes / no | Whether to remove duplicates from lists (arrays) after merging. |
 | cacheable | no       | no      | yes / no | If set to `yes`, the merged variable will be stored in the facts cache |
 | recursive_dict_merge | no | no | yes / no | Whether to do deep (recursive) merging of dictionaries, or just merge only at top level and replace values |
