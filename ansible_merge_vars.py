@@ -52,8 +52,8 @@ class ActionModule(ActionBase):
             display.v("The contents of {} are: {}".format(
                 merged_var_name, task_vars[merged_var_name]))
 
-        keys = [key for key in task_vars.keys()
-                if key.endswith(suffix_to_merge)]
+        keys = sorted([key for key in task_vars.keys()
+                if key.endswith(suffix_to_merge)])
 
         display.v("Merging vars in this order: {}".format(keys))
 
@@ -100,7 +100,7 @@ def merge_dict(merge_vals, dedup, recursive_dict_merge):
             #   LISTS: merge with merge_list
             #   DICTS: recursively merge with merge_dict
             #   any other types: replace (same as usual behaviour)
-            for key in val.keys():
+            for key in sorted(val.keys()):
                 if not key in merged:
                     # first hit of the value - just assign
                     merged[key] = val[key]
