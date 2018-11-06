@@ -100,7 +100,7 @@ def merge_dict(merge_vals, dedup, recursive_dict_merge):
             #   LISTS: merge with merge_list
             #   DICTS: recursively merge with merge_dict
             #   any other types: replace (same as usual behaviour)
-            for key in sorted(val.keys()):
+            for key in val.keys():
                 if not key in merged:
                     # first hit of the value - just assign
                     merged[key] = val[key]
