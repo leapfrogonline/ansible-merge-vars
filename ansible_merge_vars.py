@@ -52,8 +52,8 @@ class ActionModule(ActionBase):
             display.v("The contents of {} are: {}".format(
                 merged_var_name, task_vars[merged_var_name]))
 
-        keys = [key for key in task_vars.keys()
-                if key.endswith(suffix_to_merge)]
+        keys = sorted([key for key in task_vars.keys()
+                if key.endswith(suffix_to_merge)])
 
         display.v("Merging vars in this order: {}".format(keys))
 
