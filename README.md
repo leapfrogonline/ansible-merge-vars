@@ -110,7 +110,8 @@ merged_users:
   user4: jane
 ```
 
-Note that the order in which the dicts get merged is non-deterministic. So this setup:
+Note that the variables get merged in alphabetical order of their names, with
+values from later dicts replacing values from earlier dicts. So this setup:
 
 ```yaml
 users__someenvironment_users__to_merge:
@@ -132,21 +133,12 @@ merge_vars:
   expected_type: 'dict'
 ```
 
-could set a `merged_users` var that looks like this (if it were to be declared in raw yaml:
+would set a `merged_users` var that looks like this (if it were to be declared in raw yaml):
 
 ```yaml
 merged_users:
   user1: bob
   user2: jekyll
-  user3: sally
-```
-
-*OR* this:
-
-```yaml
-merged_users:
-  user1: bob
-  user2: hyde
   user3: sally
 ```
 
@@ -180,18 +172,7 @@ merge_vars:
   merged_var_name: merged_ports
   expected_type: 'list'
 ```
-will set a `merged_ports` fact that looks like this:
-
-```yaml
-merged_ports:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 5
-```
-
-*OR* this; remember, the order in which variables get merged is non-deterministic:
+will set a `merged_ports` fact that looks like this (because the variables are merged in alphabetical order):
 
 ```yaml
 merged_ports:
@@ -214,16 +195,16 @@ merge_vars:
   dedup: false
   expected_type: 'list'
 ```
-which will set this fact (or some permutation thereof):
+which will set this fact:
 
 ```yaml
 merged_ports:
-  - 1
-  - 2
-  - 3
   - 3
   - 4
   - 5
+  - 1
+  - 2
+  - 3
 ```
 
 A note about `dedup`:
@@ -271,13 +252,13 @@ and get:
 ```yaml
 merged_users:
   users:
-    - bob
-    - henry
     - sally
     - jane
-  admins:
     - bob
+    - henry
+  admins:
     - sally
+    - bob
 ```
 
 When merging dictionaries and the same key exists in both, the recursive merge checks the type of the value:
@@ -305,7 +286,7 @@ which the keys are being merged:
 PLAY [Example of merging lists] ************************************************
 
 TASK [Merge port vars] *********************************************************
-Merging vars in this order: [u'group2_ports__to_merge', u'group3_ports__to_merge', u'group1_ports__to_merge']
+Merging vars in this order: [ u'group1_ports__to_merge', u'group2_ports__to_merge', u'group3_ports__to_merge']
 ok: [localhost] => {"ansible_facts": {"merged_ports": [22, 1111, 443, 2222, 80]}, "changed": false}
 
 TASK [debug] *******************************************************************

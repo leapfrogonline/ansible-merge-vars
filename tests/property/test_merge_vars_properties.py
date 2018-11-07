@@ -1,5 +1,4 @@
 import unittest
-from itertools import permutations
 
 from hypothesis import given
 from hypothesis import example
@@ -17,6 +16,7 @@ def gen_int_lists(num):
         s.lists(s.integers(), average_size=10, max_size=100)
         for _ in range(num)
     ]
+
 
 def gen_dict_lists(num):
     """
@@ -37,6 +37,7 @@ def gen_dict_lists(num):
         for _ in range(num)
     ]
 
+
 def gen_list_dicts(num):
     """
     Generate num dict strategies of lists
@@ -54,6 +55,7 @@ def gen_list_dicts(num):
             )
         for _ in range(num)
     ]
+
 
 def gen_dicts(num):
     """
@@ -100,13 +102,8 @@ class TestMergeVarsProperties(unittest.TestCase):
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
 
         merged_var = result['ansible_facts']['merged_var']
-        possibles = [
-            x + y + z
-            for x, y, z in permutations([list1, list2, list3])
-        ]
-
-        self.assertTrue(
-            any([merged_var == x for x in possibles])
+        self.assertEqual(
+            merged_var, list1 + list2 + list3
         )
 
     @given(*gen_int_lists(3))
@@ -144,13 +141,9 @@ class TestMergeVarsProperties(unittest.TestCase):
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
 
         merged_var_set = set(result['ansible_facts']['merged_var'])
-        list1_set = set(list1)
-        list2_set = set(list2)
-        list3_set = set(list2)
+        list_set = set(list1 + list2 + list3)
 
-        self.assertTrue(list1_set.issubset(merged_var_set))
-        self.assertTrue(list2_set.issubset(merged_var_set))
-        self.assertTrue(list3_set.issubset(merged_var_set))
+        self.assertEqual(merged_var_set, list_set)
 
     @given(*gen_dicts(3))
     def test_merge_dicts(self, dict1, dict2, dict3):
@@ -165,16 +158,10 @@ class TestMergeVarsProperties(unittest.TestCase):
             'var3_whatever__to_merge': dict3,
         }
 
-        possibles = [
-            merge_dicts([x, y, z])
-            for x, y, z in permutations([dict1, dict2, dict3])
-        ]
-
+        expected = merge_dicts([dict1, dict2, dict3])
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
         merged_var = result['ansible_facts']['merged_var']
-        self.assertTrue(
-            any([merged_var == x for x in possibles])
-        )
+        self.assertEqual(merged_var, expected)
 
     @given(*gen_list_dicts(3))
     @example({'entry1': [1, 2, 3]}, {'entry1:': [3, 4, 5]}, {'entry2': [4, 5, 6]})
