@@ -5,7 +5,7 @@ from tests.utils import make_and_run_plugin
 
 class TestMergeVars(unittest.TestCase):
     def test_returns_unchanged(self):
-        """Execution returns 'unchagned' status in ansible"""
+        """Execution returns 'unchanged' status in ansible"""
         task_args = {
             'suffix_to_merge': 'whatever__to_merge',
             'merged_var_name': 'merged_var',
@@ -39,9 +39,7 @@ class TestMergeVars(unittest.TestCase):
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
         merged_var = result['ansible_facts']['merged_var']
 
-        self.assertEqual(len(merged_var), 2)
-        self.assertIn('woohoo', merged_var)
-        self.assertIn('foobar', merged_var)
+        self.assertEqual(merged_var, [u'woohoo', u'foobar'])
 
     def test_render_nested_jinja(self):
         task_args = {
@@ -54,12 +52,14 @@ class TestMergeVars(unittest.TestCase):
             'some_other_var': 'bar',
             'yet_another_var': '{{ some_var }}-{{ some_other_var }}',
             'var1_whatever__to_merge': ['{{ some_var }}'],
-            'var2_whatever__to_merge': [{'some_key': '{{ yet_another_var }}'}]
+            'var2_whatever__to_merge': [{u'some_key': '{{ yet_another_var }}'}]
         }
 
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
         merged_var = result['ansible_facts']['merged_var']
-        self.assertEqual(len(merged_var), 2)
+        self.assertEqual(
+            merged_var, [u'woohoo', {u'some_key': u'woohoo-bar'}]
+        )
 
         self.assertIn('woohoo', merged_var)
         self.assertIn({'some_key': u'woohoo-bar'}, merged_var)
@@ -105,20 +105,9 @@ class TestMergeVars(unittest.TestCase):
             'var3_whatever__to_merge': list3,
         }
 
-        possibles = [
-            [1, 2, 3, 4, 5, 6, 7],
-            [1, 2, 3, 5, 6, 7, 4],
-            [3, 4, 5, 1, 2, 6, 7],
-            [3, 4, 5, 6, 7, 1, 2],
-            [5, 6, 7, 1, 2, 3, 4],
-            [5, 6, 7, 3, 4, 1, 2],
-        ]
-
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
         merged_var = result['ansible_facts']['merged_var']
-        self.assertTrue(
-            any([merged_var == x for x in possibles])
-        )
+        self.assertEqual(merged_var, [1, 2, 3, 4, 5, 6, 7])
 
     def test_dedup_unhashable(self):
         """
@@ -135,22 +124,17 @@ class TestMergeVars(unittest.TestCase):
         }
         task_vars = {
             'var1_whatever__to_merge': [
-                {'subvar_b': 2},
-                {'subvar_c': 3},
-            ],
-            'var2_whatever__to_merge': [
                 {'subvar_a': 1},
                 {'subvar_b': 2},
             ],
+            'var2_whatever__to_merge': [
+                {'subvar_b': 2},
+                {'subvar_c': 3},
+            ],
         }
-
-        possibles = [
-            [{'subvar_b': 2}, {'subvar_c': 3}, {'subvar_a': 1}],
-            [{'subvar_a': 1}, {'subvar_b': 2}, {'subvar_c': 3}],
-        ]
 
         result = make_and_run_plugin(task_args=task_args, task_vars=task_vars)
         merged_var = result['ansible_facts']['merged_var']
-        self.assertTrue(
-            any([merged_var == x for x in possibles])
+        self.assertEqual(
+            merged_var, [{'subvar_a': 1}, {'subvar_b': 2}, {'subvar_c': 3}]
         )
