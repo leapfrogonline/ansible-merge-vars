@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is (loosely) based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.0
+
+Big thanks again to @vladimir-mencl-eresearch for this improvement!
+
+Potentially breaking change:
+- Merge order is now deterministic (alphabetical by fact name).  Hopefully you
+  weren't depending on the order in which your facts were merged, but if you
+  were, this may change that order.  At least from now on it will be the same
+  every time.
+
 ## 3.0.0
 
 This plugin is now installable from PyPI, which will make it easier to keep
