@@ -1,7 +1,8 @@
 [tox]
 envlist =
   {py27}-ansible-{$py2_releases}
-  {py35,py36}-ansible-{$py3_releases}
+  {py35,py36,py37}-ansible-{$py3_releases}
+  {py38}-ansible-{$py38_releases}
   lint
 
 [testenv]
@@ -9,9 +10,11 @@ basepython =
   py27: python2.7
   py35: python3.5
   py36: python3.6
+  py37: python3.7
+  py38: python3.8
 
 deps =
-  hypothesis>=3.6,<3.7
+  hypothesis~=4.0
   mock>=2,<3
 $ansible_dep_specs
 
@@ -24,7 +27,7 @@ skipdist = true
 basepython = python
 commands = pylint ansible_merge_vars.py tests
 deps =
-  hypothesis>=3.6,<3.7
-  mock>=2,<3
-  ansible==2.5.2
-  pylint==1.6.5
+  hypothesis
+  mock
+  ansible
+  pylint

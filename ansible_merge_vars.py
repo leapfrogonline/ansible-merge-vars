@@ -53,7 +53,7 @@ class ActionModule(ActionBase):
                 merged_var_name, task_vars[merged_var_name]))
 
         keys = sorted([key for key in task_vars.keys()
-                if key.endswith(suffix_to_merge)])
+                       if key.endswith(suffix_to_merge)])
 
         display.v("Merging vars in this order: {}".format(keys))
 
@@ -69,7 +69,7 @@ class ActionModule(ActionBase):
             if expected_type == 'list':
                 merged = []
             else:
-                merged = {}  # pylint: disable=redefined-variable-type
+                merged = {}
         elif isinstance(merge_vals[0], list):
             merged = merge_list(merge_vals, dedup)
         elif isinstance(merge_vals[0], dict):

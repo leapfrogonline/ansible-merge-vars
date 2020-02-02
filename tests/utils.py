@@ -3,8 +3,8 @@ Helpers for example and property-based tests
 
 """
 
-from ansible.template import Templar
 from ansible.parsing.dataloader import DataLoader
+from ansible.template import Templar
 import mock
 
 from ansible_merge_vars import ActionModule as MV
