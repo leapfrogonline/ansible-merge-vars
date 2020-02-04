@@ -19,8 +19,8 @@ provisioning.
 
 ## Compatibility
 
-This plugin is tested with the latest release of each minor version of Ansible
->= `2.1`. Earlier releases of some minor versions may not be compatible.  This
+This plugin is tested with the latest release of each minor version of Ansible >=
+`2.1`. Earlier releases of some minor versions may not be compatible.  This
 plugin is not compatible with combinations of older versions of Ansible and
 newer versions of Python.  The following combinations are tested:
 
