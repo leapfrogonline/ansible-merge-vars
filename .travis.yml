@@ -3,5 +3,7 @@ python:
 - '2.7'
 - '3.5'
 - '3.6'
-install: pip install pipenv tox-travis
+- '3.7'
+- '3.8'
+install: pip install tox-travis
 script: make ci-test

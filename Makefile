@@ -1,34 +1,44 @@
+VENV := venv
+PIP := ./$(VENV)/bin/pip
+PYTHON := ./$(VENV)/bin/python
+TOX := ./$(VENV)/bin/tox
+TWINE := ./$(VENV)/bin/twine
+
 default: test-all
 
-deps:
-	pipenv install
+venv:
+	python -m venv $(VENV)
 
-packaging-deps:
-	pipenv install --dev
+dev-deps: venv
+	$(PIP) install -U -r requirements.txt
 
-generate-tox-config: deps
-	pipenv run python tests/bin/generate_tox_config.py
+generate-tox-config: dev-deps
+	$(PYTHON) tests/bin/generate_tox_config.py
 
 prep-release: generate-tox-config
 
-lint:
-	pipenv run tox -e lint
+lint: dev-deps
+	$(TOX) -e lint
 
-test-all: generate-tox-config 
-	pipenv run detox
+test-all: dev-deps generate-tox-config 
+	$(TOX) --parallel auto
 
-ci-test: deps
-	pipenv run tox
+# Something about Travis is making a self-created venv act weird, so ditch it
+# just in Travis.
+ci-test:
+	pip install -U -r requirements.txt
+	python tests/bin/generate_tox_config.py
+	tox
 
 clean:
-	rm -rf .tox .hypothesis dist
+	rm -rf venv .tox .hypothesis dist tox.ini
 
-build: clean packaging-deps
-	pipenv run python setup.py sdist
-	pipenv run python setup.py bdist_wheel
+build: clean dev-deps
+	$(PYTHON) setup.py sdist
+	$(PYTHON) setup.py bdist_wheel
 
 pypi-test: build
-	pipenv run twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+	$(TWINE) upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 pypi: build
-	pipenv run twine upload dist/*
+	$(TWINE) upload dist/*

@@ -17,12 +17,18 @@ provisioning.
 - [Example Playbooks](#example-playbooks)
 - [Contributing](#contributing)
 
-## Requirements
+## Compatibility
 
-This plugin requires Ansible release >= 2.1.0.0.
+This plugin is tested with the latest release of each minor version of Ansible
+>= `2.1`. Earlier releases of some minor versions may not be compatible.  This
+plugin is not compatible with combinations of older versions of Ansible and
+newer versions of Python.  The following combinations are tested:
 
-Additionally, there are some releases of Ansible for which this plugin does not work because of bugs in those releases:
-  * [Incompatible Ansible Releases](incompatible_ansible_releases.txt)
+| Python        | Ansible |
+|---------------|---------|
+| 2.7           | >= 2.1  |
+| >= 3.5, < 3.8 | >= 2.5  |
+| >= 3.8        | >= 2.8  |
 
 ## Installation
 
@@ -316,9 +322,8 @@ section for instructions on how to run the test suite.
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-These are the only prerequisites to working on this project locally:
+There is only one prerequisite to working on this project locally:
 
-  1. You have [Pipenv](https://docs.pipenv.org) installed.
   1. You have the Python versions in the [.python-version](.python-version)
      installed and on your path (probably with
      [pyenv](https://github.com/pyenv/pyenv)
@@ -326,9 +331,9 @@ These are the only prerequisites to working on this project locally:
 A development workflow may look like this:
 
   1. Clone this repository
-  1. Run `make deps`
-     * This will use [Pipenv](https://docs.pipenv.org) to install all of the
-       dependencies needed to build a release and run tests.
+  1. Run `make dev-deps`
+     * This will create a virtualenv `venv` in the root of this project and
+       install all of the dependencies needed to build a release and run tests.
   1. Run `make test-all`
      * This will use [tox](https://tox.readthedocs.io/en/latest/) to run the
        tests against different combinations of python versions and ansible
@@ -343,23 +348,22 @@ A development workflow may look like this:
      available and tell tox to only run the tests for one combination:
 
      ```
-    $ pipenv run tox -l
+    $ venv/bin/tox -l
 
-    py27-ansible-2.1.0.0
-    py27-ansible-2.1.1.0
-    py27-ansible-2.1.2.0
-    py27-ansible-2.1.3.0
-    py27-ansible-2.2.0.0
-    py27-ansible-2.2.1.0
+    py27-ansible-2.1
+    py27-ansible-2.2
+    py27-ansible-2.3
+    py27-ansible-2.4
+    py27-ansible-2.5
+    py27-ansible-2.6
     ...
-    py35-ansible-2.5.1
-    py35-ansible-2.5.2
-    py36-ansible-2.5.0
-    py36-ansible-2.5.1
-    py36-ansible-2.5.2
+    py35-ansible-2.5
+    py35-ansible-2.6
+    py36-ansible-2.7
+    py36-ansible-2.8
     ...
 
-    $ pipenv run tox -e py36-ansible-2.5.2
+    $ venv/bin/tox -e py36-ansible-2.5
     ...
     ```
 

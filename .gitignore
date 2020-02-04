@@ -1,3 +1,6 @@
+# tox.ini is generated on every CI run to grab the latest versions of ansible
+tox.ini
+
 # tmp editor files
 .#*
 

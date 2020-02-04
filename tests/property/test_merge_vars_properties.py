@@ -13,7 +13,7 @@ def gen_int_lists(num):
 
     """
     return [
-        s.lists(s.integers(), average_size=10, max_size=100)
+        s.lists(s.integers(), max_size=100)
         for _ in range(num)
     ]
 
@@ -28,10 +28,8 @@ def gen_dict_lists(num):
             s.dictionaries(
                 keys=s.text(),
                 values=s.integers(),
-                average_size=5,
                 max_size=20
             ),
-            average_size=10,
             max_size=100
             )
         for _ in range(num)
@@ -47,10 +45,8 @@ def gen_list_dicts(num):
         s.dictionaries(
             keys=s.text(min_size=1),
             values=s.lists(s.integers(),
-                           average_size=10,
                            max_size=100
                           ),
-            average_size=5,
             max_size=20
             )
         for _ in range(num)
@@ -66,7 +62,7 @@ def gen_dicts(num):
         s.dictionaries(
             keys=s.text(),
             values=s.integers(),
-            average_size=10, max_size=100
+            max_size=100
         )
         for _ in range(num)
     ]
