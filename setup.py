@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='ansible_merge_vars',
-    version='4.0.0',
+    version='5.0.0',
     description='An Ansible action plugin to explicitly merge inventory variables',  # noqa
     long_description=long_description,
     long_description_content_type='text/markdown',

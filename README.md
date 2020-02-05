@@ -280,7 +280,6 @@ When merging dictionaries and the same key exists in both, the recursive merge c
 | merged_var_name | yes |        | <identifier> | Name of the target variable. |
 | expected_type | yes |          | dict, list | Expected type of the merged variable (one of dict or list) |
 | dedup     | no       | yes     | yes / no | Whether to remove duplicates from lists (arrays) after merging. |
-| cacheable | no       | no      | yes / no | If set to `yes`, the merged variable will be stored in the facts cache |
 | recursive_dict_merge | no | no | yes / no | Whether to do deep (recursive) merging of dictionaries, or just merge only at top level and replace values |
 
 ## Verbosity

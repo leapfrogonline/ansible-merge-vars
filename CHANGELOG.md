@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is (loosely) based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0
+
+Big thanks to @yeled @ibarrere for info that contributed to this release.
+
+Potentially breaking change:
+- The `cacheable` option has been removed from this plugin.  Since Ansible 2.5,
+  unless a variable is set by the built-in `set_fact` action plugin, there is
+  no way to prevent it from being stored in the persistent fact cache if fact
+  caching is enabled.  If you have been using this plugin with Ansible >= 2.5,
+  there will be no change in behaviour with this release.
+
+  In order to keep behaviour consistent across Ansible versions, if you have
+  been using it with Ansible < 2.5, setting `cacheable` to `true` will no
+  longer prevent the merged var from being stored in the persistent fact cache.
+
+  Since every Ansible run, after the first, with the fact cache enabled will
+  trigger the `already defined` warning, that warning has been removed.
+
 ## 4.0.0
 
 Big thanks again to @vladimir-mencl-eresearch for this improvement!
