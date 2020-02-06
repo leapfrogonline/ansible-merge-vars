@@ -33,9 +33,17 @@ class ActionModule(ActionBase):
         merged_var_name = self._task.args.get('merged_var_name', '')
         dedup = self._task.args.get('dedup', True)
         expected_type = self._task.args.get('expected_type')
-        cacheable = bool(self._task.args.get('cacheable', False))
         recursive_dict_merge = bool(self._task.args.get('recursive_dict_merge', False))
         all_keys = task_vars.keys()
+
+        if 'cacheable' in self._task.args.keys():
+            display.deprecated(
+                "The `cacheable` option does not actually do anything, since Ansible 2.5. "
+                "No matter what, the variable set by this plugin will be set in the fact "
+                "cache if you have fact caching enabled.  To get rid of this warning, "
+                "remove the `cacheable` argument from your merge_vars task.  This warning "
+                "will be removed in a future version of this plugin."
+            )
 
         # Validate args
         if expected_type not in ['dict', 'list']:
@@ -46,11 +54,6 @@ class ActionModule(ActionBase):
             raise AnsibleError("merged_var_name '%s' is not a valid identifier" % merged_var_name)
         if not suffix_to_merge.endswith('__to_merge'):
             raise AnsibleError("Merge suffix must end with '__to_merge', sorry!")
-        if merged_var_name in all_keys:
-            warning = "{} is already defined, are you sure you want to overwrite it?"
-            display.warning(warning.format(merged_var_name))
-            display.v("The contents of {} are: {}".format(
-                merged_var_name, task_vars[merged_var_name]))
 
         keys = sorted([key for key in task_vars.keys()
                        if key.endswith(suffix_to_merge)])
@@ -81,7 +84,6 @@ class ActionModule(ActionBase):
 
         return {
             'ansible_facts': {merged_var_name: merged},
-            'ansible_facts_cacheable': cacheable,
             'changed': False,
         }
 

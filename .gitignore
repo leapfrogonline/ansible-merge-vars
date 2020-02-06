@@ -1,6 +1,9 @@
 # tox.ini is generated on every CI run to grab the latest versions of ansible
 tox.ini
 
+# Ansible cruft
+*.retry
+
 # tmp editor files
 .#*
 
@@ -74,9 +77,6 @@ target/
 
 # IPython Notebook
 .ipynb_checkpoints
-
-# pyenv
-.python-version
 
 # celery beat schedule file
 celerybeat-schedule
