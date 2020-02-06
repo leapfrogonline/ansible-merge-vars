@@ -37,7 +37,7 @@ class ActionModule(ActionBase):
         all_keys = task_vars.keys()
 
         if 'cacheable' in self._task.args.keys():
-            display.warning(
+            display.deprecated(
                 "The `cacheable` option does not actually do anything, since Ansible 2.5. "
                 "No matter what, the variable set by this plugin will be set in the fact "
                 "cache if you have fact caching enabled.  To get rid of this warning, "
