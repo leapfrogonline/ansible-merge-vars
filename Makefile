@@ -17,14 +17,14 @@ generate-tox-config: dev-deps
 
 prep-release: generate-tox-config
 
-lint: dev-deps
+lint: dev-deps generate-tox-config
 	$(TOX) -e lint
 
 test-all: dev-deps generate-tox-config 
 	$(TOX) --parallel auto
 
-# Something about Travis is making a self-created venv act weird, so ditch it
-# just in Travis.
+# No venv needed in CI; let the GH Actions tox plugin handle the Python
+# versions
 ci-test:
 	pip install -U -r requirements.txt
 	python tests/bin/generate_tox_config.py
