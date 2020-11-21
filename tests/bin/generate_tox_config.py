@@ -37,7 +37,7 @@ def filter_releases(releases, min_release):
 
 def tox_dep_specs(releases):
     spec_strings = [
-        '  ansible-{release}: ansible=={release}'.format(release=release)
+        '  ansible-{release}: ansible~={release}.0'.format(release=release)
         for release in releases
     ]
     return '\n'.join(spec_strings)

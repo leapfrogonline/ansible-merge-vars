@@ -3,7 +3,17 @@ envlist =
   {py27}-ansible-{$py2_releases}
   {py35,py36,py37}-ansible-{$py3_releases}
   {py38}-ansible-{$py38_releases}
+  {py39}-ansible-{$py38_releases}
   lint
+
+[gh-actions]
+python =
+    2.7: py27
+    3.5: py35
+    3.6: py36
+    3.7: py37
+    3.8: py38
+    3.9: py39
 
 [testenv]
 basepython =
@@ -12,6 +22,7 @@ basepython =
   py36: python3.6
   py37: python3.7
   py38: python3.8
+  py39: python3.9
 
 deps =
   hypothesis~=4.0

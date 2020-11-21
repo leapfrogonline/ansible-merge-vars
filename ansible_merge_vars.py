@@ -34,7 +34,6 @@ class ActionModule(ActionBase):
         dedup = self._task.args.get('dedup', True)
         expected_type = self._task.args.get('expected_type')
         recursive_dict_merge = bool(self._task.args.get('recursive_dict_merge', False))
-        all_keys = task_vars.keys()
 
         if 'cacheable' in self._task.args.keys():
             display.deprecated(
