@@ -1,6 +1,17 @@
 name: ci
 
-on: [push, pull_request]
+on: 
+  push:
+    branch: master
+  pull_request:
+    branch: master
+
+  # Run once a day to pick up new ansible versions
+  schedule:
+    - cron: '13 8 * * *'
+
+  workflow_dispatch:
+
 
 jobs:
   test:
