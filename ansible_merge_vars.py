@@ -125,7 +125,7 @@ def merge_list(merge_vals, dedup):
 
 def check_type(mylist, _type):
     """ Ensure that all members of mylist are of type _type. """
-    if not all([isinstance(item, _type) for item in mylist]):
+    if not all(isinstance(item, _type) for item in mylist):
         raise AnsibleError("All values to merge must be of the same type, either dict or list")
 
 
