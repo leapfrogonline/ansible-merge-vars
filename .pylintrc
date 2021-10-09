@@ -63,7 +63,8 @@ disable=
   too-few-public-methods,
   similarities,
   missing-docstring,
-  redundant-u-string-prefix
+  redundant-u-string-prefix,
+  consider-using-f-string
 
 [REPORTS]
 
