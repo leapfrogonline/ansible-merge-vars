@@ -24,11 +24,11 @@ This plugin is tested with the latest release of each minor version of Ansible >
 plugin is not compatible with combinations of older versions of Ansible and
 newer versions of Python.  The following combinations are tested:
 
-| Python        | Ansible |
-|---------------|---------|
-| 2.7           | >= 2.1  |
-| >= 3.5, < 3.8 | >= 2.5  |
-| >= 3.8        | >= 2.8  |
+| Python        | Ansible        |
+|---------------|----------------|
+| 2.7           | >= 2.1, < 5.0  |
+| >= 3.5, < 3.8 | >= 2.5, < 5.0  |
+| >= 3.8        | >= 2.8         |
 
 ## Installation
 

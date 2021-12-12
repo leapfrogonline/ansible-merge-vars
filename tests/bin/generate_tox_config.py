@@ -22,7 +22,7 @@ TOX_TMPL = os.path.join(ROOT_DIR, 'tox.ini.tmpl')
 TOX_INI = os.path.join(ROOT_DIR, 'tox.ini')
 
 
-def filter_releases(releases, min_release):
+def filter_releases(releases, min_release, max_release=None):
     finished = [release for release in releases
                 if not re.search(r'[a-zA-z]', release)]
     minor = list(set(
@@ -30,8 +30,10 @@ def filter_releases(releases, min_release):
     ))
     relevant = [
         release for release in minor
-        if LooseVersion(release) >= LooseVersion(min_release)
+        if (LooseVersion(release) >= LooseVersion(min_release) and
+            LooseVersion(release) < LooseVersion(max_release or '99999'))
     ]
+
     return sorted(relevant, key=LooseVersion)
 
 
@@ -48,8 +50,8 @@ def main():
     response = requests.get('https://pypi.python.org/pypi/ansible/json').json()
     releases = response['releases'].keys()
 
-    py2_releases = filter_releases(releases, '2.1')
-    py3_releases = filter_releases(releases, '2.5')
+    py2_releases = filter_releases(releases, '2.1', '5.0')
+    py3_releases = filter_releases(releases, '2.5', '5.0')
     py38_releases = filter_releases(releases, '2.8')
 
     print('Reading template {}'.format(TOX_TMPL))
