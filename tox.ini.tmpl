@@ -1,19 +1,15 @@
 [tox]
 envlist =
-  {py27}-ansible-{$py2_releases}
-  {py35,py36,py37}-ansible-{$py3_releases}
-  {py38}-ansible-{$py38_releases}
-  {py39}-ansible-{$py38_releases}
+  py27-ansible-{$py27_releases}
+  py35-ansible-{$py35_releases}
+  py36-ansible-{$py36_releases}
+  py37-ansible-{$py37_releases}
+  py38-ansible-{$py38_releases}
+  py39-ansible-{$py39_releases}
+  py310-ansible-{$py310_releases}
+  py311-ansible-{$py311_releases}
+  py312-ansible-{$py312_releases}
   lint
-
-[gh-actions]
-python =
-    2.7: py27
-    3.5: py35
-    3.6: py36
-    3.7: py37
-    3.8: py38
-    3.9: py39
 
 [testenv]
 basepython =
@@ -23,15 +19,26 @@ basepython =
   py37: python3.7
   py38: python3.8
   py39: python3.9
+  py310: python3.10
+  py311: python3.11
+  py312: python3.12
 
 deps =
   hypothesis~=4.0
   mock>=2,<3
 $ansible_dep_specs
+$jinja_dep_specs
 
 commands =
+  python --version
   python -m unittest discover -s tests
   /bin/bash -c 'ansible-playbook -v {toxinidir}/examples/*_playbook.yml'
+
+  # We run out of diskspace on Github Actions runners
+  rm -rf {envdir}
+allowlist_externals =
+  /bin/bash
+  rm
 
 [testenv:lint]
 skipdist = true
@@ -41,4 +48,6 @@ deps =
   hypothesis
   mock
   ansible
-  pylint==2.11.1
+  pylint==3.0.3
+allowlist_externals =
+  pylint

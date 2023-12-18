@@ -17,7 +17,11 @@ def make_and_run_plugin(task_args, task_vars):
 
     """
     templar = Templar(loader=DataLoader())
-    templar.set_available_variables(task_vars)
+    try:
+        templar.set_available_variables(task_vars)
+    except AttributeError:
+        # set_available_variables was removed in ansible 2.13
+        templar.available_variables = task_vars
     task = mock.MagicMock(args=task_args)
     plugin = MV(
         task=task,

@@ -1,6 +1,10 @@
+# Explicitly not pinnning most versions here to get valid versions for different python versions
 pip
 setuptools
 wheel
 twine
-tox
+
+# TOX_SKIP_ENV broke with an earlier version of 4, but we can't use the latest 4 with 2.7 :|
+# https://github.com/tox-dev/tox/issues/2698
+tox<4
 requests
