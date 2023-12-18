@@ -23,13 +23,6 @@ lint: dev-deps generate-tox-config
 test-all: dev-deps generate-tox-config 
 	$(TOX) --parallel auto
 
-# No venv needed in CI; let the GH Actions tox plugin handle the Python
-# versions
-ci-test:
-	pip install -U -r requirements.txt
-	python tests/bin/generate_tox_config.py
-	tox
-
 clean:
 	rm -rf venv .tox .hypothesis dist tox.ini
 

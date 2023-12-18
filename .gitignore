@@ -96,3 +96,5 @@ ENV/
 
 # Generated MANIFEST
 MANIFEST
+
+.idea

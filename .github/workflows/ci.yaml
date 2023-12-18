@@ -12,35 +12,64 @@ on:
 
   workflow_dispatch:
 
-
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 5
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
-
+        python-version:
+        - image: '2.7'
+          tox: py27
+        - image: '3.5'
+          tox: py35
+        - image: '3.6'
+          tox: py36
+        - image: '3.7'
+          tox: py37
+        - image: '3.8'
+          tox: py38
+        - image: '3.9'
+          tox: py39
+        - image: '3.10'
+          tox: py310
+        - image: '3.11'
+          tox: py311
+        - image: '3.12'
+          tox: py312
+    container:
+      image: python:${{ matrix.python-version.image }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    - name: Free disk space
+      # https://github.com/actions/virtual-environments/issues/709
       run: |
-        python -m pip install --upgrade pip
-        pip install tox tox-gh-actions
+        echo "=========original CI disk space"
+        df -h
+        rm -rf "/usr/local/share/boost"
+        rm -rf "$AGENT_TOOLSDIRECTORY"
+        echo "=========after clean up, the left CI disk space"
+        df -h
+
+    - uses: actions/checkout@v4
+
     - name: Test with tox
-      run: make ci-test
+      env:
+        # Can't include envs by regex, only exclude them :|
+        TOX_SKIP_ENV: '^(?!${{ matrix.python-version.tox }}-)'
+      run: |
+        set -x
+        pip install -U -r requirements.txt
+        python tests/bin/generate_tox_config.py
+        env | grep TOX
+        tox
 
   lint:
     runs-on: ubuntu-latest
+    container:
+      image: python:3.12
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+    - uses: actions/checkout@v4
+
     - name: Lint
-      run: make lint
+      run: |
+        apt-get update && apt-get install make
+        make lint

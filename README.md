@@ -3,6 +3,16 @@
 ![CI](https://github.com/leapfrogonline/ansible-merge-vars/workflows/ci/badge.svg?branch=master)
 [![PyPI](https://img.shields.io/pypi/v/ansible_merge_vars.svg)](https://pypi.org/project/ansible_merge_vars/)
 
+## You probably don't need this anymore!
+As of [March 2023](https://github.com/ansible-collections/community.general/commit/f52dd194f917fa3162b158b762808aff886c27f1), the [merge_variables lookup](https://docs.ansible.com/ansible/latest/collections/community/general/merge_variables_lookup.html) is in the [Community.General collection](https://docs.ansible.com/ansible/latest/collections/community/general/index.html)
+The differences between that and this plugin are:
+* This plugin has an option to dedup lists when creating the merged var.  You can [unique filter](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unique_filter.html) with the new lookup for that.
+* This plugin has the option to non-recursively merge dicts.  You probably always want to recursively merge them, which the new lookup plugin does.
+
+The only reason you probably want to use this plugin instead of the lookup is if you are stuck using an older version of Ansible or can't otherwise use the built-in lookup.
+That said...
+
+## Overview
 An Ansible plugin to merge all variables in context with a certain suffix (lists
 or dicts only) and create a new variable that contains the result of this merge.
 This is an Ansible action plugin, which is basically an Ansible module that runs
@@ -29,6 +39,9 @@ newer versions of Python.  The following combinations are tested:
 | 2.7           | >= 2.1  |
 | >= 3.5, < 3.8 | >= 2.5  |
 | >= 3.8        | >= 2.8  |
+
+Above Ansible 2.8, _at least_ all of the combinations in the [Ansible Core Support Matrix](https://docs.ansible.com/ansible/latest/reference_appendices/release_and_maintenance.html#ansible-core-support-matrix)
+are tested.  Some other combinations are tested too (even if the Ansible maintainers [may get salty about it](https://github.com/ansible/ansible/issues/81946))
 
 ## Installation
 
@@ -216,7 +229,7 @@ merged_ports:
 A note about `dedup`:
   * It has no effect when the merged vars are dictionaries.
 
-### Recursive merging ###
+### Recursive merging
 
 When dealing with complex data structures, you may want to do a deep (recursive) merge.
 
@@ -272,7 +285,7 @@ When merging dictionaries and the same key exists in both, the recursive merge c
 * if the entry value is a dict, it merges the values (recursively) as dicts (merge_dict)
 * any other values: just replace (use last)
 
-### Module options ###
+### Module options
 
 | parameter | required | default | choices | comments |
 | --------- | -------- | ------- | ------- | -------- |
@@ -309,7 +322,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=6    changed=0    unreachable=0    failed=0
 ```
 
-## Example Playbooks
+## Example playbooks
 
 There are some example playbooks in the `examples` directory that show how the
 various features work in the context of an actual Ansible playbook.  These
@@ -323,9 +336,9 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 There is only one prerequisite to working on this project locally:
 
-  1. You have the Python versions in the [.python-version](.python-version)
+  1. You have the Python versions in the [.tool-versions](.tool-versions)
      installed and on your path (probably with
-     [pyenv](https://github.com/pyenv/pyenv)
+     [asdf](https://asdf-vm.com/)
 
 A development workflow may look like this:
 
@@ -347,24 +360,24 @@ A development workflow may look like this:
      available and tell tox to only run the tests for one combination:
 
      ```
-    $ venv/bin/tox -l
+     $ venv/bin/tox -l
 
-    py27-ansible-2.1
-    py27-ansible-2.2
-    py27-ansible-2.3
-    py27-ansible-2.4
-    py27-ansible-2.5
-    py27-ansible-2.6
-    ...
-    py35-ansible-2.5
-    py35-ansible-2.6
-    py36-ansible-2.7
-    py36-ansible-2.8
-    ...
+     py27-ansible-2.1
+     py27-ansible-2.2
+     py27-ansible-2.3
+     py27-ansible-2.4
+     py27-ansible-2.5
+     py27-ansible-2.6
+     ...
+     py37-ansible-2.5
+     py37-ansible-2.6
+     py38-ansible-2.7
+     py38-ansible-2.8
+     ...
 
-    $ venv/bin/tox -e py36-ansible-2.5
-    ...
-    ```
+     ...
+     $ venv/bin/tox -e py36-ansible-2.5
+     ```
 
 If you have any ideas about things to add or improve, or find any bugs to fix, we're all ears!  Just a few guidelines:
 
